@@ -1,164 +1,152 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Alumni World Map - Alumni Connect</title>
 
-  <!-- Google Fonts Montserrat -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
 
   <style>
-    /* Reset and base */
-    html, body {
-      margin: 0; padding: 0; height: 100%;
-      font-family: 'Montserrat', sans-serif;
-      background: #f0f8ff;
-      color: #023e8a;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    html, body { margin:0; padding:0; height:100%; font-family:"Montserrat", sans-serif; background:linear-gradient(135deg,#90e0ef,#caf0f8); color:#023e8a; display:flex; flex-direction:column; }
+    nav.nav { max-width:1100px; margin:0 auto; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; background:#0077b6; color:white; border-radius:0 0 12px 12px; }
+    nav.nav .brand a { color:white; font-weight:700; font-size:1.4rem; text-decoration:none; }
+    .back-btn { background:white; color:#0077b6; font-weight:600; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; }
+    .back-btn:hover { background:#e0e0e0; }
+    main.main { max-width:1100px; margin:30px auto 40px; flex-grow:1; display:flex; flex-direction:column; align-items:center; gap:12px; }
+    main.main h2 { color:#0077b6; font-weight:800; font-size:1.8rem; margin-bottom:6px; }
+    main.main p { color:#03506f; max-width:800px; text-align:center; margin-bottom:12px; }
+    #map { height:650px; width:100%; max-width:1100px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.12); border:3px solid #0096c7; background:white; cursor:grab; }
+    #map:active { cursor:grabbing; }
+    .custom-marker { background:#0077b6; color:white; border-radius:50%; width:36px; height:36px; display:flex; justify-content:center; align-items:center; font-weight:700; font-size:1.05rem; box-shadow:0 3px 8px rgba(0,150,199,0.7); border:2px solid #0077b6; transition: transform 0.2s ease; }
+    .custom-marker:hover { transform:scale(1.1); z-index:9999; }
+    .leaflet-popup-content-wrapper { border-radius:12px !important; box-shadow:0 8px 20px rgba(0,0,0,0.12) !important; font-family:"Montserrat", sans-serif !important; color:#023e8a !important; font-weight:600 !important; }
+    .leaflet-popup-content { font-size:1rem !important; }
+    .leaflet-popup-tip { background:#0077b6 !important; }
+    footer { text-align:center; color:#0077b6; font-weight:600; margin-bottom:20px; }
+    @media(max-width:768px){main.main h2{font-size:1.6rem}main.main p{font-size:1rem}#map{height:500px}}
 
-    /* Navbar */
-    nav.nav {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #0077B6;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      color: white;
-    }
-
-    nav.nav .brand a {
-      color: white;
-      font-weight: 700;
-      font-size: 1.4rem;
-      text-decoration: none;
-    }
-
-    nav.nav .brand span {
-      color: #90e0ef;
-      font-weight: 800;
-    }
-
-    nav.nav .nav-actions a.btn {
-      background-color: #0096c7;
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 8px 14px;
-      border-radius: 6px;
-      margin-left: 12px;
-      transition: background-color 0.3s ease;
-    }
-
-    nav.nav .nav-actions a.btn:hover {
-      background-color: #005f8c;
-    }
-
-    /* Main content */
-    main.main {
-      max-width: 1100px;
-      margin: 20px auto;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    main.main h2 {
-      color: #0077B6;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    main.main p {
-      color: #555;
-      margin-bottom: 15px;
-    }
-
-    /* Map */
-    #map {
-      height: 600px;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
-
-    /* Footer */
-    footer.site-footer {
-      max-width: 1100px;
-      margin: 0 auto 20px auto;
-      text-align: center;
-      color: #0077B6;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+    
   </style>
 </head>
 <body>
-
-  <header class="hero small-hero">
-    <nav class="nav">
-      <div class="brand"><a href="index.html">Alumni <span>Connect</span></a></div>
-      <div class="nav-actions">
-        <a href="alumni-directory.html" class="btn">Directory</a>
-        <a href="alumni-profile.html" class="btn">Events</a>
-      </div>
-    </nav>
-  </header>
+  <button onclick="history.back()" 
+          style="position:absolute; left:20px; top:12px; background:white; color:#0077b6; font-weight:600; border:none; padding:6px 12px; border-radius:8px; cursor:pointer;">
+    ⬅ Back
+  </button>
+  <nav style="position: relative; max-width:1100px; margin:0 auto; padding:12px 20px; background:#0077b6; border-radius:0 0 12px 12px; display:flex; justify-content:center; align-items:center; color:white;">
+  
+  <div class="brand">
+    <a href="index.html" style="color:white; font-weight:700; font-size:1.4rem; text-decoration:none;">Alumni Connect</a>
+  </div>
+</nav>
 
   <main class="main">
     <h2>🌍 Alumni Across the World</h2>
-    <p>Explore where our alumni are making impact globally.</p>
+    <p>Explore where our alumni are — click markers to see alumni lists for that location.</p>
     <div id="map"></div>
   </main>
 
-  <footer class="site-footer">
-    <p>&copy; <span id="yearFooter"></span> Alumni Connect</p>
-  </footer>
+  <footer>&copy; <span id="yearFooter"></span> Alumni Connect</footer>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>
-    // Update footer year
-    document.getElementById('yearFooter').textContent = new Date().getFullYear();
+    document.getElementById("yearFooter").textContent = new Date().getFullYear();
 
-    // Initialize map after DOM content is loaded
-    document.addEventListener("DOMContentLoaded", function () {
-      const map = L.map('map').setView([20, 0], 2);
+    document.addEventListener("DOMContentLoaded", () => {
+      const map = L.map("map").setView([20.0, 78.0], 4);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:18, attribution:"© OpenStreetMap contributors"}).addTo(map);
 
-      // OpenStreetMap Tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(map);
-
-      // Alumni sample locations
       const alumniLocations = [
-        { name: "John Doe", coords: [40.7128, -74.0060], city: "New York, USA" },
-        { name: "Priya Singh", coords: [28.6139, 77.2090], city: "Delhi, India" },
-        { name: "Michael Lee", coords: [37.7749, -122.4194], city: "San Francisco, USA" },
-        { name: "Sara Patel", coords: [51.5074, -0.1278], city: "London, UK" },
-        { name: "Carlos Ruiz", coords: [19.4326, -99.1332], city: "Mexico City, Mexico" },
-        { name: "Chen Wei", coords: [31.2304, 121.4737], city: "Shanghai, China" },
-        { name: "Fatima Zahra", coords: [33.5731, -7.5898], city: "Casablanca, Morocco" }
+        // India
+        {name:"Priya Singh", city:"Delhi", lat:28.6139, lon:77.2090},
+        {name:"Raj Gupta", city:"Delhi", lat:28.6139, lon:77.2090},
+        {name:"Anita Desai", city:"Mumbai", lat:19.0760, lon:72.8777},
+        {name:"Rahul Sharma", city:"Mumbai", lat:19.0760, lon:72.8777},
+        {name:"Vikram Shah", city:"Bengaluru", lat:12.9716, lon:77.5946},
+        {name:"Neha Reddy", city:"Bengaluru", lat:12.9716, lon:77.5946},
+        {name:"Kumar Iyer", city:"Chennai", lat:13.0827, lon:80.2707},
+        {name:"Sonal Mehta", city:"Kolkata", lat:22.5726, lon:88.3639},
+        {name:"Kavita Roy", city:"Kolkata", lat:22.5726, lon:88.3639},
+        {name:"Pooja Singh", city:"Hyderabad", lat:17.3850, lon:78.4867},
+        {name:"Arun Kumar", city:"Hyderabad", lat:17.3850, lon:78.4867},
+        {name:"Rohit Jain", city:"Pune", lat:18.5204, lon:73.8567},
+        {name:"Siddharth", city:"Pune", lat:18.5204, lon:73.8567},
+        {name:"Alok Verma", city:"Jaipur", lat:26.9124, lon:75.7873},
+        {name:"Meera Singh", city:"Jaipur", lat:26.9124, lon:75.7873},
+        {name:"Deepak Yadav", city:"Lucknow", lat:26.8467, lon:80.9462},
+        {name:"Neha Gupta", city:"Lucknow", lat:26.8467, lon:80.9462},
+        {name:"Amit Bansal", city:"Ahmedabad", lat:23.0225, lon:72.5714},
+        {name:"Priyanka", city:"Ahmedabad", lat:23.0225, lon:72.5714},
+        {name:"Rakesh", city:"Bhopal", lat:23.2599, lon:77.4126},
+        {name:"Shweta", city:"Bhopal", lat:23.2599, lon:77.4126},
+        {name:"Vikas", city:"Chandigarh", lat:30.7333, lon:76.7794},
+        {name:"Anjali", city:"Chandigarh", lat:30.7333, lon:76.7794},
+        {name:"Suresh", city:"Indore", lat:22.7196, lon:75.8577},
+        {name:"Ritu", city:"Indore", lat:22.7196, lon:75.8577},
+        {name:"Kiran", city:"Guwahati", lat:26.1445, lon:91.7362},
+        {name:"Pallavi", city:"Guwahati", lat:26.1445, lon:91.7362},
+        {name:"Amit Singh", city:"Chennai", lat:13.0827, lon:80.2707},
+        {name:"Divya", city:"Chennai", lat:13.0827, lon:80.2707},
+        {name:"Ramesh", city:"Bengaluru", lat:12.9716, lon:77.5946},
+        {name:"Geeta", city:"Bengaluru", lat:12.9716, lon:77.5946},
+        {name:"Sanjay", city:"Delhi", lat:28.6139, lon:77.2090},
+        {name:"Neetu", city:"Delhi", lat:28.6139, lon:77.2090},
+        {name:"Vandana", city:"Mumbai", lat:19.0760, lon:72.8777},
+        {name:"Arvind", city:"Mumbai", lat:19.0760, lon:72.8777},
+        {name:"Kalyan", city:"Hyderabad", lat:17.3850, lon:78.4867},
+        {name:"Manisha", city:"Hyderabad", lat:17.3850, lon:78.4867},
+        {name:"Saurabh", city:"Pune", lat:18.5204, lon:73.8567},
+        {name:"Rashmi", city:"Pune", lat:18.5204, lon:73.8567},
+        {name:"Rohini", city:"Jaipur", lat:26.9124, lon:75.7873},
+        {name:"Ajay", city:"Jaipur", lat:26.9124, lon:75.7873},
+        {name:"Nitin", city:"Lucknow", lat:26.8467, lon:80.9462},
+        {name:"Richa", city:"Lucknow", lat:26.8467, lon:80.9462},
+        {name:"Pankaj", city:"Ahmedabad", lat:23.0225, lon:72.5714},
+        {name:"Smita", city:"Ahmedabad", lat:23.0225, lon:72.5714},
+        {name:"Vijay", city:"Bhopal", lat:23.2599, lon:77.4126},
+        {name:"Rakhi", city:"Bhopal", lat:23.2599, lon:77.4126},
+        {name:"Shivani", city:"Chandigarh", lat:30.7333, lon:76.7794},
+        {name:"Naveen", city:"Chandigarh", lat:30.7333, lon:76.7794},
+        // Global
+        {name:"John Doe", city:"New York, USA", lat:40.7128, lon:-74.0060},
+        {name:"Alex Morgan", city:"London, UK", lat:51.5074, lon:-0.1278},
+        {name:"Maria Lopez", city:"Mexico City, Mexico", lat:19.4326, lon:-99.1332},
+        {name:"Chen Wei", city:"Shanghai, China", lat:31.2304, lon:121.4737},
+        {name:"Fatima Zahra", city:"Casablanca, Morocco", lat:33.5731, lon:-7.5898}
       ];
 
-      // Add markers
-      alumniLocations.forEach(alumni => {
-        L.marker(alumni.coords)
-          .addTo(map)
-          .bindPopup(`<b>${alumni.name}</b><br>${alumni.city}`);
+      const grouped = {};
+      alumniLocations.forEach(a => {
+        const key = ${a.lat.toFixed(4)},${a.lon.toFixed(4)};
+        if(!grouped[key]) grouped[key] = { coords:[a.lat, a.lon], city:a.city, names:[] };
+        grouped[key].names.push(a.name);
       });
+
+      const markers = L.markerClusterGroup({
+        maxClusterRadius: 40,
+        iconCreateFunction: cluster => {
+          const count = cluster.getChildCount();
+          return L.divIcon({ html:<div style="background:#0077b6;color:#fff;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;box-shadow:0 3px 8px rgba(0,0,0,0.3)">${count}</div>, className:"marker-cluster", iconSize:L.point(44,44)});
+        }
+      });
+
+      Object.values(grouped).forEach(loc => {
+        const count = loc.names.length;
+        const namesList = loc.names.map(n=><li>${n}</li>).join("");
+        const popup = <div style="font-weight:700;font-size:1.05rem;margin-bottom:6px;">${count} Alumni${count>1?"s":""}</div><div style="color:#0077b6;margin-bottom:6px;">${loc.city}</div><ul style="margin:0;padding-left:18px;color:#005f73;">${namesList}</ul>;
+        const icon = L.divIcon({ html:<div class="custom-marker">${count}</div>, iconSize:[36,36], iconAnchor:[18,36], popupAnchor:[0,-36]});
+        markers.addLayer(L.marker(loc.coords, {icon}).bindPopup(popup));
+      });
+
+      map.addLayer(markers);
+      const allBounds = markers.getBounds();
+      if(allBounds.isValid()) map.fitBounds(allBounds,{padding:[40,40], maxZoom:6});
     });
   </script>
-
 </body>
 </html>
