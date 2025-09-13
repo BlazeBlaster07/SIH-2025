@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alumni Connect | Login Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel with Branding -->
+    <div class="left-panel">
+      <h1>Welcome to <span style="color:#0077B6;">Alumni Connect</span> 🎓</h1>
+      <p>Login to stay connected with your network, find mentors, and view events.</p>
+      <img src="https://img.freepik.com/free-vector/people-social-networking_23-2147690174.jpg?q=80&semt=ais_hybrid&w=740" class="alumni-illustration">
+    </div>
+
+    <!-- Right Panel Login Form -->
+    <div class="right-panel">
+      <form class="login-form" id="loginForm">
+        <div class="logo">🎓</div>
+        <h2>Login Portal</h2>
+
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter username" required />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" required />
+        </div>
+
+        <div class="input-group">
+          <label for="role">Login as</label>
+          <select id="role" required>
+            <option value="">-- Select Role --</option>
+            <option value="admin">Admin</option>
+            <option value="alumni">Alumni</option>
+            <option value="student">Student</option> <!-- ✅ New Student Role -->
+          </select>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

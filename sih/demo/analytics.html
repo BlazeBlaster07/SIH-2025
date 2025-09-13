@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alumni Analytics Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0; padding: 20px;
+      background: #f0f8ff;
+      color: #023e8a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-bar {
+      background-color: #0077B6;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .nav-left a, .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0096c7;
+      transition: background-color 0.3s ease;
+    }
+    .nav-left a:hover, .nav-right a:hover {
+      background-color: #005f8c;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0077B6;
+      font-weight: 700;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .chart-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 25px 30px;
+      flex: 1 1 500px;
+      min-width: 320px;
+    }
+    canvas {
+      max-width: 100%;
+      height: 320px;
+    }
+    .contributors {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 25px 30px;
+      max-width: 350px;
+      flex: 1 1 350px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .contributors h2 {
+      margin-top: 0;
+    }
+    .contributor {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .contributor:last-child {
+      border-bottom: none;
+    }
+    .contributor-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #0077B6;
+    }
+    .contribution-details {
+      font-size: 0.9rem;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .chart-container, .contributors {
+        flex: none;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a href="alumni.html">🏠 Alumni Home</a>
+      <a href="admin.html">⚙️ Admin</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </nav>
+
+  <h1>Alumni Analytics Dashboard</h1>
+
+  <div class="container">
+
+    <section class="chart-container" aria-label="Active users over time">
+      <h2>Active Users Over Time</h2>
+      <canvas id="activeUsersChart" role="img" aria-label="Line chart showing active users over time"></canvas>
+    </section>
+
+    <section class="chart-container" aria-label="Contribution type distribution">
+      <h2>Contribution Breakdown</h2>
+      <canvas id="contributionPieChart" role="img" aria-label="Pie chart showing contribution distribution"></canvas>
+    </section>
+
+    <section class="contributors" aria-label="List of contributors">
+      <h2>Top Contributors</h2>
+      <div id="contributorsList" tabindex="0">
+        <!-- contributor items injected here -->
+      </div>
+    </section>
+
+  </div>
+
+<script>
+  // Logout button
+  document.getElementById('logoutBtn').addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem('loggedInUser');
+    window.location.href = 'index.html';
+  });
+
+  // Sample data - Replace with real data from backend/api
+  const activeUsersData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    counts: [120, 150, 170, 200, 220, 210, 250, 270, 300]
+  };
+
+  const contributionData = {
+    labels: ['Event Participation', 'Donations', 'Mentorship', 'Feedback', 'Content Contribution'],
+    counts: [40, 25, 15, 10, 10]
+  };
+
+  const contributors = [
+    { name: 'John Doe', contributions: { events: 12, donations: '$500', mentorships: 4, feedbacks: 7, content: 5 }},
+    { name: 'Priya Singh', contributions: { events: 8, donations: '$1000', mentorships: 6, feedbacks: 10, content: 3 }},
+    { name: 'Michael Lee', contributions: { events: 15, donations: '$200', mentorships: 2, feedbacks: 3, content: 8 }},
+    { name: 'Sara Patel', contributions: { events: 10, donations: '$300', mentorships: 5, feedbacks: 6, content: 4 }},
+    { name: 'Carlos Ruiz', contributions: { events: 5, donations: '$700', mentorships: 1, feedbacks: 2, content: 1 }},
+    { name: 'Chen Wei', contributions: { events: 9, donations: '$400', mentorships: 3, feedbacks: 5, content: 6 }},
+    { name: 'Fatima Zahra', contributions: { events: 7, donations: '$250', mentorships: 4, feedbacks: 4, content: 2 }},
+  ];
+
+  // Initialize Active Users Line Chart
+  const ctxActive = document.getElementById('activeUsersChart').getContext('2d');
+  const activeUsersChart = new Chart(ctxActive, {
+    type: 'line',
+    data: {
+      labels: activeUsersData.labels,
+      datasets: [{
+        label: 'Active Users',
+        data: activeUsersData.counts,
+        borderColor: '#0077B6',
+        backgroundColor: 'rgba(0,119,182,0.2)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 50 }
+        }
+      }
+    }
+  });
+
+  // Initialize Contribution Pie Chart
+  const ctxPie = document.getElementById('contributionPieChart').getContext('2d');
+  const contributionPieChart = new Chart(ctxPie, {
+    type: 'pie',
+    data: {
+      labels: contributionData.labels,
+      datasets: [{
+        data: contributionData.counts,
+        backgroundColor: ['#00b4d8', '#ff595e', '#8ac926', '#ffca3a', '#1982c4'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 14 } }
+        },
+        tooltip: { enabled: true }
+      }
+    }
+  });
+
+  // Render contributors list
+  const contributorsList = document.getElementById('contributorsList');
+
+  contributors.forEach(contributor => {
+    const div = document.createElement('div');
+    div.className = 'contributor';
+    div.innerHTML = `
+      <div class="contributor-name">${contributor.name}</div>
+      <div class="contribution-details">
+        <span>Events: ${contributor.contributions.events}</span>
+        <span>Donations: ${contributor.contributions.donations}</span>
+      </div>
+      <div class="contribution-details" style="margin-top:4px;">
+        <span>Mentorships: ${contributor.contributions.mentorships}</span>
+        <span>Feedbacks: ${contributor.contributions.feedbacks}</span>
+        <span>Content: ${contributor.contributions.content}</span>
+      </div>
+    `;
+    contributorsList.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!-- chatbot.html -->
+<button id="chatbot-toggle" class="chatbot-toggle">💬</button>
+
+<div id="chatbot-sidebar" class="chatbot-sidebar hidden">
+  <div class="chatbot-header">
+    💬 AI Chatbot
+    <button id="closeChatbot" class="close-btn">✖</button>
+  </div>
+  <div class="chatbot-messages" id="chatbotMessages">
+    <p class="bot-msg">Hi! How can I help you today?</p>
+  </div>
+  <div class="chatbot-input">
+    <input type="text" id="chatInput" placeholder="Type your message..." />
+    <button onclick="sendChat()">Send</button>
+  </div>
+</div>
+
+<style>
+.chatbot-sidebar {
+  position: fixed;
+  right: 10px;
+  bottom: 60px;
+  width: 300px;
+  height: 400px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease-in-out;
+}
+.hidden {
+  display: none;
+}
+.chatbot-header {
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+.chatbot-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.chatbot-input {
+  display: flex;
+  padding: 5px;
+  border-top: 1px solid #ddd;
+}
+.chatbot-input input {
+  flex: 1;
+  padding: 5px;
+}
+</style>
+
+<script>
+function sendChat() {
+  const input = document.getElementById("chatInput");
+  if (input.value.trim() === "") return;
+  const messages = document.getElementById("chatbotMessages");
+
+  const userMsg = document.createElement("p");
+  userMsg.textContent = "You: " + input.value;
+  messages.appendChild(userMsg);
+
+  const botMsg = document.createElement("p");
+  botMsg.textContent = "🤖 Thinking...";
+  messages.appendChild(botMsg);
+
+  input.value = "";
+}
+
+// Toggle Chatbot Open/Close
+document.getElementById("chatbot-toggle").addEventListener("click", () => {
+  document.getElementById("chatbot-sidebar").classList.toggle("hidden");
+});
+
+document.getElementById("closeChatbot").addEventListener("click", () => {
+  document.getElementById("chatbot-sidebar").classList.add("hidden");
+});
+</script>

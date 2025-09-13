@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alumni Directory</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background: #f0f8ff;
+      color: #023e8a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      background-color: #0077B6;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-left a, .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0096c7;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-left a:hover, .nav-right a:hover {
+      background-color: #005f8c;
+    }
+
+    /* Page Title & count */
+    .header {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+    .header h1 {
+      margin: 0;
+      color: #0077B6;
+      font-weight: 700;
+    }
+    .alumni-count {
+      margin-top: 4px;
+      font-weight: 600;
+      color: #023e8a;
+    }
+
+    /* Filters & Search */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 0 10px 20px;
+      max-width: 900px;
+      margin: 0 auto 10px auto;
+    }
+
+    .filters label {
+      font-weight: 600;
+      color: #023e8a;
+    }
+
+    select, input[type="text"] {
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #0077B6;
+      outline: none;
+      width: 150px;
+      max-width: 100%;
+      transition: border-color 0.3s ease;
+    }
+    select:focus, input[type="text"]:focus {
+      border-color: #023e8a;
+    }
+
+    /* Alumni List */
+    .alumni-list {
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      padding: 0 10px;
+      overflow-y: auto;
+      flex-grow: 1;
+      min-height: 300px;
+    }
+
+    .alumni-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      transition: box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .alumni-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .alumni-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0077B6;
+      margin-bottom: 5px;
+    }
+
+    .alumni-info {
+      font-size: 14px;
+      color: #023e8a;
+      margin-bottom: 3px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;
+        align-items: center;
+      }
+      select, input[type="text"] {
+        width: 90%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a href="alumni.html">🏠 Alumni Home</a>
+      <a href="alumni-profile.html">👤 Profile</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </nav>
+
+  <div class="header">
+    <h1>Alumni Directory</h1>
+    <div class="alumni-count" id="alumniCount">Total Alumni: 0</div>
+  </div>
+
+  <section class="filters">
+    <div>
+      <label for="filterGender">Gender:</label><br />
+      <select id="filterGender" aria-label="Filter by Gender">
+        <option value="all">All</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="filterYear">Graduation Year:</label><br />
+      <select id="filterYear" aria-label="Filter by Graduation Year">
+        <option value="all">All</option>
+        <!-- dynamically populate years -->
+      </select>
+    </div>
+    <div>
+      <label for="searchName">Search Name:</label><br />
+      <input type="text" id="searchName" placeholder="Type name to search" aria-label="Search alumni by name" />
+    </div>
+  </section>
+
+  <section class="alumni-list" id="alumniList" aria-live="polite" aria-atomic="true">
+    <!-- Alumni cards here -->
+  </section>
+
+<script>
+  // Sample alumni data (replace with real data or API calls)
+  const alumniData = [
+    { name: "John Doe", gender: "Male", graduationYear: 2010, email: "john.doe@example.com", city: "New York" },
+    { name: "Priya Singh", gender: "Female", graduationYear: 2015, email: "priya.singh@example.com", city: "Delhi" },
+    { name: "Michael Lee", gender: "Male", graduationYear: 2012, email: "michael.lee@example.com", city: "San Francisco" },
+    { name: "Sara Patel", gender: "Female", graduationYear: 2018, email: "sara.patel@example.com", city: "London" },
+    { name: "Carlos Ruiz", gender: "Male", graduationYear: 2011, email: "carlos.ruiz@example.com", city: "Mexico City" },
+    { name: "Chen Wei", gender: "Male", graduationYear: 2014, email: "chen.wei@example.com", city: "Shanghai" },
+    { name: "Fatima Zahra", gender: "Female", graduationYear: 2013, email: "fatima.zahra@example.com", city: "Casablanca" },
+    { name: "Alex Morgan", gender: "Other", graduationYear: 2016, email: "alex.morgan@example.com", city: "Toronto" }
+  ];
+
+  const alumniListElem = document.getElementById('alumniList');
+  const alumniCountElem = document.getElementById('alumniCount');
+  const filterGender = document.getElementById('filterGender');
+  const filterYear = document.getElementById('filterYear');
+  const searchName = document.getElementById('searchName');
+
+  // Populate graduation year filter options dynamically based on alumni data
+  function populateYearFilter() {
+    const years = Array.from(new Set(alumniData.map(a => a.graduationYear))).sort((a,b) => b - a);
+    years.forEach(year => {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      filterYear.appendChild(option);
+    });
+  }
+
+  // Render alumni cards based on filtered data
+  function renderAlumniList(filteredAlumni) {
+    alumniListElem.innerHTML = '';
+    alumniCountElem.textContent = `Total Alumni: ${filteredAlumni.length}`;
+
+    if (filteredAlumni.length === 0) {
+      alumniListElem.innerHTML = '<p style="text-align:center; font-style: italic; color: #555;">No alumni found.</p>';
+      return;
+    }
+
+    filteredAlumni.forEach(alumni => {
+      const card = document.createElement('article');
+      card.className = 'alumni-card';
+      card.tabIndex = 0;  // keyboard focusable
+
+      card.innerHTML = `
+        <div class="alumni-name">${alumni.name}</div>
+        <div class="alumni-info"><strong>Gender:</strong> ${alumni.gender}</div>
+        <div class="alumni-info"><strong>Graduation Year:</strong> ${alumni.graduationYear}</div>
+        <div class="alumni-info"><strong>City:</strong> ${alumni.city}</div>
+        <div class="alumni-info"><strong>Email:</strong> <a href="mailto:${alumni.email}" style="color:#0077B6;">${alumni.email}</a></div>
+      `;
+      alumniListElem.appendChild(card);
+    });
+  }
+
+  // Filter alumni based on user input
+  function filterAlumni() {
+    const genderVal = filterGender.value;
+    const yearVal = filterYear.value;
+    const nameVal = searchName.value.trim().toLowerCase();
+
+    const filtered = alumniData.filter(alumni => {
+      const matchGender = genderVal === 'all' || alumni.gender === genderVal;
+      const matchYear = yearVal === 'all' || alumni.graduationYear.toString() === yearVal;
+      const matchName = alumni.name.toLowerCase().includes(nameVal);
+      return matchGender && matchYear && matchName;
+    });
+
+    renderAlumniList(filtered);
+  }
+
+  // Event Listeners
+  filterGender.addEventListener('change', filterAlumni);
+  filterYear.addEventListener('change', filterAlumni);
+  searchName.addEventListener('input', filterAlumni);
+
+  // Populate year filter and render initial list
+  populateYearFilter();
+  renderAlumniList(alumniData);
+
+  // Logout button functionality
+  document.getElementById('logoutBtn').addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>

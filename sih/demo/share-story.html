@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alumni Stories</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f8ff;
+      color: #023e8a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .nav-bar {
+      background-color: #0077B6;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0096c7;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-bar a:hover {
+      background-color: #005f8c;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #0077B6;
+    }
+
+    .write-story-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .write-story-btn {
+      background-color: #0077B6;
+      color: white;
+      font-weight: 600;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .write-story-btn:hover {
+      background-color: #005f8c;
+    }
+
+    .stories-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding-bottom: 15px;
+      scroll-behavior: smooth;
+    }
+
+    .story-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      min-width: 280px;
+      flex-shrink: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .story-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .story-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #0077B6;
+    }
+
+    .story-author {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+   .story-content {
+  font-size: 0.95rem;
+  color: #023e8a;
+  flex-grow: 1;
+  display: -webkit-box;          /* required for line-clamp */
+ /* stylelint-disable-next-line */
+-webkit-line-clamp: 5;
+       /* number of lines to show */
+  -webkit-box-orient: vertical;  /* required for line-clamp */
+  overflow: hidden;              /* hide overflowing text */
+  text-overflow: ellipsis;       /* adds "..." */
+}
+
+
+    /* Scrollbar style */
+    .stories-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .stories-container::-webkit-scrollbar-thumb {
+      background-color: #0077B6;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .story-card {
+        min-width: 220px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="alumni.html">🏠 Alumni Home</a>
+    <a href="alumni-profile.html">👤 Profile</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </nav>
+
+  <h1>Alumni Stories</h1>
+
+  <div class="write-story-container">
+    <button class="write-story-btn" onclick="openWriteStory()">✍️ Write a Story</button>
+  </div>
+
+  <div class="stories-container" id="storiesContainer">
+    <!-- Sample stories -->
+    <div class="story-card" tabindex="0">
+      <div class="story-title">Journey from Campus to Corporate</div>
+      <div class="story-author">by John Doe</div>
+      <div class="story-content">
+        My journey started with humble beginnings at the university, where I built a network of friends and mentors...
+      </div>
+    </div>
+
+    <div class="story-card" tabindex="0">
+      <div class="story-title">Volunteering Experiences</div>
+      <div class="story-author">by Priya Singh</div>
+      <div class="story-content">
+        Participating in community service during college shaped my values and helped me become a better leader...
+      </div>
+    </div>
+
+    <div class="story-card" tabindex="0">
+      <div class="story-title">Tech Startup Adventures</div>
+      <div class="story-author">by Michael Lee</div>
+      <div class="story-content">
+        Launching my own startup after graduation was challenging but rewarding. I learned a lot about resilience...
+      </div>
+    </div>
+
+    <div class="story-card" tabindex="0">
+      <div class="story-title">Life Abroad and Lessons</div>
+      <div class="story-author">by Sara Patel</div>
+      <div class="story-content">
+        Moving abroad for work was a big step, but adapting to new cultures broadened my worldview and skills...
+      </div>
+    </div>
+
+    <div class="story-card" tabindex="0">
+      <div class="story-title">Returning to Teach</div>
+      <div class="story-author">by Carlos Ruiz</div>
+      <div class="story-content">
+        After years in the industry, I returned to my alma mater to give back by teaching the next generation...
+      </div>
+    </div>
+
+    <div class="story-card" tabindex="0">
+      <div class="story-title">Research Breakthrough</div>
+      <div class="story-author">by Chen Wei</div>
+      <div class="story-content">
+        Conducting research in renewable energy during my PhD opened new doors and collaborations...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'index.html';
+    });
+
+    // Open Write Story placeholder
+    function openWriteStory() {
+      alert('Write Story feature coming soon! 🚀');
+      // You can replace this with a modal or redirect to a story submission form
+    }
+  </script>
+
+</body>
+</html>

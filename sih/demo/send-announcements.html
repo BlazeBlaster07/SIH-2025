@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Send Announcement</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0; padding: 20px;
+      background: #f0f8ff;
+      color: #023e8a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #0077B6;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #023e8a;
+      display: block;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 120px;
+      max-height: 180px;
+    }
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    button {
+      background-color: #0096c7;
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover:not(:disabled) {
+      background-color: #005f8c;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    nav.nav-bar {
+      background-color: #0077B6;
+      width: 100%;
+      padding: 12px 20px;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    nav.nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      background: #0096c7;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    nav.nav-bar a:hover {
+      background-color: #005f8c;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="admin.html">← Admin Dashboard</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </nav>
+
+  <h1>Send Announcement</h1>
+
+  <div class="container" role="main" aria-label="Announcement form">
+    <div>
+      <label for="userIdsInput">User ID(s) <small>(comma separated)</small></label>
+      <input type="text" id="userIdsInput" placeholder="e.g. 123, 456, 789" aria-describedby="userIdsHelp" />
+    </div>
+    <div>
+      <label for="messageInput">Message</label>
+      <textarea id="messageInput" placeholder="Write your announcement here..." readonly></textarea>
+    </div>
+    <div class="buttons">
+      <button id="writeBtn" type="button">Write</button>
+      <button id="editBtn" type="button">Edit</button>
+      <button id="sendBtn" type="button">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const userIdsInput = document.getElementById('userIdsInput');
+    const messageInput = document.getElementById('messageInput');
+    const writeBtn = document.getElementById('writeBtn');
+    const editBtn = document.getElementById('editBtn');
+    const sendBtn = document.getElementById('sendBtn');
+
+    writeBtn.addEventListener('click', () => {
+      userIdsInput.value = '';
+      messageInput.value = '';
+      messageInput.removeAttribute('readonly');
+      messageInput.focus();
+    });
+
+    editBtn.addEventListener('click', () => {
+      messageInput.removeAttribute('readonly');
+      messageInput.focus();
+    });
+
+    sendBtn.addEventListener('click', () => {
+      const userIds = userIdsInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (!userIds) {
+        alert('Please enter at least one User ID.');
+        userIdsInput.focus();
+        return;
+      }
+      if (!message) {
+        alert('Message cannot be empty.');
+        messageInput.focus();
+        return;
+      }
+
+      // TODO: Connect to backend API to send announcement here
+      alert(`Announcement sent to user(s): ${userIds}\n\nMessage:\n${message}`);
+
+      messageInput.setAttribute('readonly', true);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'index.html';
+    });
+  </script>
+
+</body>
+</html>

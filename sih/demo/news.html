@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>College & Company XYZ News</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f0f8ff;
+      margin: 0;
+      padding: 40px 20px;
+      color: #023e8a;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0077B6;
+      font-weight: 700;
+    }
+
+    .news-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: white;
+      padding: 20px 0;
+    }
+
+    .news-scroll {
+      display: flex;
+      gap: 20px;
+      will-change: transform;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .news-card {
+      flex: 0 0 300px;
+      background: #caf0f8;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      color: #023e8a;
+      font-weight: 600;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .news-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .news-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #0077B6;
+    }
+
+    .news-date {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .news-description {
+      font-size: 15px;
+      line-height: 1.4;
+      color: #023e8a;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Latest News on Colleges & Company XYZ</h1>
+
+  <div class="news-container" id="newsContainer">
+    <div class="news-scroll" id="newsScroll">
+      <div class="news-card">
+        <div class="news-title">College ABC Celebrates 50th Anniversary</div>
+        <div class="news-date">Aug 25, 2025</div>
+        <div class="news-description">The college hosted a grand event to mark 50 years of excellence in education.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Company XYZ Launches New AI Product</div>
+        <div class="news-date">Aug 20, 2025</div>
+        <div class="news-description">Innovative AI software promises to revolutionize the tech industry worldwide.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Student Exchange Program with Europe</div>
+        <div class="news-date">Aug 15, 2025</div>
+        <div class="news-description">New opportunities for students to study abroad in prestigious universities across Europe.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Company XYZ Partners with Local Startups</div>
+        <div class="news-date">Aug 10, 2025</div>
+        <div class="news-description">Collaborations aimed at fostering innovation and entrepreneurship in the community.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Alumni Meet Scheduled for Next Month</div>
+        <div class="news-date">Aug 5, 2025</div>
+        <div class="news-description">Get ready to reconnect with classmates and expand your professional network.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Research Grants Awarded to Top Scholars</div>
+        <div class="news-date">Aug 1, 2025</div>
+        <div class="news-description">Funding announced for groundbreaking research projects across various fields.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Company XYZ Hosts Annual Tech Conference</div>
+        <div class="news-date">July 28, 2025</div>
+        <div class="news-description">Industry leaders gather to discuss future trends and innovations in technology.</div>
+      </div>
+
+      <!-- Duplicate cards to create seamless scrolling -->
+      <div class="news-card">
+        <div class="news-title">College ABC Celebrates 50th Anniversary</div>
+        <div class="news-date">Aug 25, 2025</div>
+        <div class="news-description">The college hosted a grand event to mark 50 years of excellence in education.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-title">Company XYZ Launches New AI Product</div>
+        <div class="news-date">Aug 20, 2025</div>
+        <div class="news-description">Innovative AI software promises to revolutionize the tech industry worldwide.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const scrollContainer = document.getElementById('newsScroll');
+    let scrollAmount = 0;
+    const scrollSpeed = 1; // Adjust scroll speed here
+    let animationFrameId;
+    let isPaused = false;
+
+    function animateScroll() {
+      if (!isPaused) {
+        scrollAmount += scrollSpeed;
+        // Reset scroll when end reached for seamless loop
+        if (scrollAmount >= scrollContainer.scrollWidth / 2) {
+          scrollAmount = 0;
+        }
+        scrollContainer.style.transform = `translateX(${-scrollAmount}px)`;
+      }
+      animationFrameId = requestAnimationFrame(animateScroll);
+    }
+
+    // Start animation
+    animateScroll();
+
+    // Pause scrolling on hover
+    scrollContainer.addEventListener('mouseenter', () => {
+      isPaused = true;
+      scrollContainer.style.cursor = 'grab';
+    });
+
+    // Resume scrolling on mouse leave
+    scrollContainer.addEventListener('mouseleave', () => {
+      isPaused = false;
+      scrollContainer.style.cursor = 'default';
+    });
+  </script>
+
+</body>
+</html>
