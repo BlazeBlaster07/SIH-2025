@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alumni Connect | Login Portal</title>
+  <title>Alumni Connect | Login</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    /* Extra styling for error */
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: none;
+    }
+    .error-border {
+      border: 2px solid red;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Left Panel with Branding -->
-    <div class="left-panel">
-      <h1>Welcome to <span style="color:#0077B6;">Alumni Connect</span> 🎓</h1>
-      <p>Login to stay connected with your network, find mentors, and view events.</p>
-      <img src="https://img.freepik.com/free-vector/people-social-networking_23-2147690174.jpg?q=80&semt=ais_hybrid&w=740" class="alumni-illustration">
+  <div class="login-container">
+    <!-- Left Panel -->
+    <div class="login-left">
+      <h1>Welcome to <span class="brand">Alumni Connect</span> 🎓</h1>
+      <p>Connect, Learn & Grow with your community.</p>
+      <img src="./log.png" class="login-illustration" alt="Alumni Illustration">
     </div>
 
-    <!-- Right Panel Login Form -->
-    <div class="right-panel">
+    <!-- Right Panel (Login Form) -->
+    <div class="login-right">
       <form class="login-form" id="loginForm">
-        <div class="logo">🎓</div>
-        <h2>Login Portal</h2>
+        <h2 class="form-title">Sign In</h2>
 
         <div class="input-group">
           <label for="username">Username</label>
           <input type="text" id="username" placeholder="Enter username" required />
         </div>
 
-        <div class="input-group">
+        <div class="input-group password-group">
           <label for="password">Password</label>
           <input type="password" id="password" placeholder="Enter password" required />
+          <span class="toggle-password" onclick="togglePassword()">👁</span>
         </div>
 
         <div class="input-group">
@@ -38,15 +50,74 @@
             <option value="">-- Select Role --</option>
             <option value="admin">Admin</option>
             <option value="alumni">Alumni</option>
-            <option value="student">Student</option> <!-- ✅ New Student Role -->
+            <option value="student">Student</option>
           </select>
         </div>
 
-        <button type="submit">Login</button>
+        <!-- ✅ College Select Dropdown -->
+        <div class="input-group">
+          <label for="college">Select College</label>
+          <select id="college" required>
+            <option value="">-- Select College --</option>
+            <option value="iiit-bhagalpur">IIIT Bhagalpur</option>
+            <option value="iit-delhi">IIT Delhi</option>
+            <option value="nit-patna">NIT Patna</option>
+            <option value="vit-vellore">VIT Vellore</option>
+          </select>
+          <div id="collegeError" class="error-message">Only IIIT Bhagalpur users can login.</div>
+        </div>
+
+        <div class="extras">
+          <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+          <a href="#" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
       </form>
+
+      <footer class="login-footer">
+        <p>© 2025 Alumni Connect. All Rights Reserved.</p>
+      </footer>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+  function togglePassword() {
+    const passField = document.getElementById("password");
+    passField.type = passField.type === "password" ? "text" : "password";
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Stop default form submission (we control it manually)
+
+    const collegeSelect = document.getElementById("college");
+    const roleSelect = document.getElementById("role");
+    const errorMsg = document.getElementById("collegeError");
+
+    // 1️⃣ Validate college
+    if (collegeSelect.value !== "iiit-bhagalpur") {
+      errorMsg.style.display = "block";
+      collegeSelect.classList.add("error-border");
+      return; // Stop here if wrong college
+    }
+
+    // Hide error if correct
+    errorMsg.style.display = "none";
+    collegeSelect.classList.remove("error-border");
+
+    // 2️⃣ Redirect based on role
+    const role = roleSelect.value;
+    if (role === "admin") {
+      window.location.href = "admin.html";
+    } else if (role === "alumni") {
+      window.location.href = "alumni.html";
+    } else if (role === "student") {
+      window.location.href = "student.html";
+    } else {
+      alert("Please select a valid role.");
+    }
+  });
+</script>
+
 </body>
 </html>
