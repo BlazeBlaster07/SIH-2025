@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manage Alumni - Admin Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background: #f0f8ff;
+      color: #023e8a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .nav-bar {
+      background-color: #023e8a;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .nav-left a, .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0077B6;
+      transition: background-color 0.3s ease;
+    }
+    .nav-left a:hover, .nav-right a:hover {
+      background-color: #005f8c;
+    }
+
+    /* Header and stats */
+    .header {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+    .header h1 {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* Search + Add Button */
+    .search-container {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .search-container input[type="text"] {
+      width: 280px;
+      max-width: 90%;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 2px solid #0077B6;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .search-container input[type="text"]:focus {
+      border-color: #023e8a;
+    }
+    .add-btn {
+      background-color: #28a745;
+      color: white;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .add-btn:hover {
+      background-color: #1e7e34;
+    }
+
+    /* Alumni list */
+    .alumni-list {
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      padding: 0 10px;
+    }
+    .alumni-row {
+      display: flex;
+      justify-content: space-between;
+      background: white;
+      margin-bottom: 10px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      align-items: center;
+    }
+    .alumni-info {
+      flex: 1;
+    }
+    .alumni-info span {
+      display: inline-block;
+      min-width: 120px;
+      font-weight: 600;
+      color: #0077B6;
+    }
+    .alumni-actions {
+      flex-shrink: 0;
+    }
+    button.edit-btn {
+      padding: 8px 14px;
+      background-color: #0096c7;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button.edit-btn:hover {
+      background-color: #005f8c;
+    }
+
+    /* Modal Background */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+
+    /* Modal Content */
+    .modal {
+      background: white;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      padding: 20px 25px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      color: #023e8a;
+    }
+
+    .modal form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .modal label {
+      font-weight: 600;
+      color: #0077B6;
+    }
+
+    .modal input, .modal select {
+      padding: 8px 12px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1.5px solid #0077B6;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .modal input:focus, .modal select:focus {
+      border-color: #023e8a;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .modal-buttons button {
+      padding: 8px 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .modal-buttons .save-btn {
+      background-color: #0077B6;
+      color: white;
+    }
+    .modal-buttons .save-btn:hover {
+      background-color: #005f8c;
+    }
+    .modal-buttons .cancel-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+    .modal-buttons .cancel-btn:hover {
+      background-color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      .alumni-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .alumni-info span {
+        min-width: auto;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .alumni-actions {
+        margin-top: 10px;
+        width: 100%;
+        text-align: right;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a href="admin.html">🏠 Admin Home</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </nav>
+
+  <div class="header">
+    <h1>Manage Alumni Dashboard</h1>
+  </div>
+
+  <div class="stats" aria-live="polite" aria-atomic="true">
+    <div>Total Alumni: <span id="totalAlumniCount">0</span></div>
+    <div>Registered Alumni: <span id="registeredAlumniCount">0</span></div>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search alumni by name..." aria-label="Search alumni by name" />
+    <button class="add-btn" id="addAlumniBtn">➕ Add Alumni</button>
+  </div>
+
+  <section class="alumni-list" id="alumniList" aria-live="polite" aria-atomic="true">
+    <!-- Alumni rows inserted here -->
+  </section>
+
+  <!-- Edit Modal -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h2 id="modalTitle">Edit Alumni</h2>
+      <form id="editForm">
+        <label for="editName">Name:</label>
+        <input type="text" id="editName" required />
+        <label for="editGender">Gender:</label>
+        <select id="editGender" required>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <label for="editYear">Graduation Year:</label>
+        <input type="number" id="editYear" min="1900" max="2100" required />
+        <label for="editCity">City:</label>
+        <input type="text" id="editCity" required />
+        <label for="editEmail">Email:</label>
+        <input type="email" id="editEmail" required />
+        <div class="modal-buttons">
+          <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+          <button type="submit" class="save-btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  // Load from localStorage if available
+  let alumniData = JSON.parse(localStorage.getItem("alumniData")) || [
+    { id: 1, name: "John Doe", gender: "Male", graduationYear: 2010, city: "New York", email: "john.doe@example.com", registered: true },
+    { id: 2, name: "Priya Singh", gender: "Female", graduationYear: 2015, city: "Delhi", email: "priya.singh@example.com", registered: true },
+    { id: 3, name: "Michael Lee", gender: "Male", graduationYear: 2012, city: "San Francisco", email: "michael.lee@example.com", registered: false },
+    { id: 4, name: "Sara Patel", gender: "Female", graduationYear: 2018, city: "London", email: "sara.patel@example.com", registered: true }
+  ];
+
+  const totalAlumniCountElem = document.getElementById('totalAlumniCount');
+  const registeredAlumniCountElem = document.getElementById('registeredAlumniCount');
+  const alumniListElem = document.getElementById('alumniList');
+  const searchInput = document.getElementById('searchInput');
+  const addAlumniBtn = document.getElementById('addAlumniBtn');
+
+  // Modal elements
+  const modalBg = document.getElementById('modalBg');
+  const editForm = document.getElementById('editForm');
+  const editName = document.getElementById('editName');
+  const editGender = document.getElementById('editGender');
+  const editYear = document.getElementById('editYear');
+  const editCity = document.getElementById('editCity');
+  const editEmail = document.getElementById('editEmail');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  let currentEditId = null;
+  let isAddingNew = false;
+
+  function saveToLocalStorage() {
+    localStorage.setItem("alumniData", JSON.stringify(alumniData));
+  }
+
+  function updateStats() {
+    totalAlumniCountElem.textContent = alumniData.length;
+    registeredAlumniCountElem.textContent = alumniData.filter(a => a.registered).length;
+  }
+
+  function renderAlumniList(data) {
+    alumniListElem.innerHTML = '';
+    if (data.length === 0) {
+      alumniListElem.innerHTML = '<p style="text-align:center; font-style: italic; color: #555;">No alumni found.</p>';
+      return;
+    }
+    data.forEach(alumni => {
+      const row = document.createElement('div');
+      row.className = 'alumni-row';
+      row.innerHTML = `
+        <div class="alumni-info"><span>Name:</span> ${alumni.name}</div>
+        <div class="alumni-info"><span>Gender:</span> ${alumni.gender}</div>
+        <div class="alumni-info"><span>Grad Year:</span> ${alumni.graduationYear}</div>
+        <div class="alumni-info"><span>City:</span> ${alumni.city}</div>
+        <div class="alumni-info"><span>Email:</span> <a href="mailto:${alumni.email}" style="color:#0077B6;">${alumni.email}</a></div>
+        <div class="alumni-actions">
+          <button class="edit-btn" data-id="${alumni.id}" aria-label="Edit ${alumni.name}">Edit</button>
+        </div>
+      `;
+      alumniListElem.appendChild(row);
+    });
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = Number(e.target.getAttribute('data-id'));
+        openEditModal(id);
+      });
+    });
+  }
+
+  function filterAlumni() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const filtered = alumniData.filter(alumni => alumni.name.toLowerCase().includes(searchTerm));
+    renderAlumniList(filtered);
+  }
+
+  function openEditModal(id) {
+    const alumni = alumniData.find(a => a.id === id);
+    if (!alumni) return;
+    isAddingNew = false;
+    currentEditId = id;
+    document.getElementById("modalTitle").textContent = "Edit Alumni";
+    editName.value = alumni.name;
+    editGender.value = alumni.gender;
+    editYear.value = alumni.graduationYear;
+    editCity.value = alumni.city;
+    editEmail.value = alumni.email;
+    modalBg.classList.add('active');
+  }
+
+  function openAddModal() {
+    isAddingNew = true;
+    currentEditId = null;
+    document.getElementById("modalTitle").textContent = "Add New Alumni";
+    editForm.reset();
+    modalBg.classList.add('active');
+  }
+
+  function closeModal() {
+    modalBg.classList.remove('active');
+    currentEditId = null;
+    isAddingNew = false;
+    editForm.reset();
+  }
+
+  editForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (isAddingNew) {
+      const newAlumni = {
+        id: Date.now(),
+        name: editName.value.trim(),
+        gender: editGender.value,
+        graduationYear: Number(editYear.value),
+        city: editCity.value.trim(),
+        email: editEmail.value.trim(),
+        registered: true
+      };
+      alumniData.push(newAlumni);
+    } else {
+      const index = alumniData.findIndex(a => a.id === currentEditId);
+      if (index !== -1) {
+        alumniData[index] = {
+          ...alumniData[index],
+          name: editName.value.trim(),
+          gender: editGender.value,
+          graduationYear: Number(editYear.value),
+          city: editCity.value.trim(),
+          email: editEmail.value.trim()
+        };
+      }
+    }
+    saveToLocalStorage();
+    closeModal();
+    filterAlumni();
+    updateStats();
+  });
+
+  cancelBtn.addEventListener('click', closeModal);
+  modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
+
+  addAlumniBtn.addEventListener('click', openAddModal);
+
+  document.getElementById('logoutBtn').addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem("adminLoggedIn");
+    window.location.href = "index.html";
+  });
+
+  updateStats();
+  renderAlumniList(alumniData);
+  searchInput.addEventListener('input', filterAlumni);
+</script>
+
+</body>
+</html>

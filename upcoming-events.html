@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upcoming Events</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .events-container {
+      width: 360px;
+      height: 500px;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      background: white;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .events-header {
+      background-color: #0077B6;
+      color: white;
+      padding: 16px 20px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: absolute;
+      top: 70px;
+      padding: 20px;
+      width: 100%;
+      height: calc(100% - 70px);
+      animation: scrollUp 30s linear infinite;
+      box-sizing: border-box;
+      background: white;
+    }
+
+    .event-card {
+      background: #caf0f8;
+      border-radius: 12px;
+      padding: 15px 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .event-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #023e8a;
+    }
+
+    .event-desc {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      color: #03045ecc;
+    }
+
+    .join-btn {
+      align-self: flex-start;
+      background-color: #0077B6;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .join-btn:hover {
+      background-color: #005f8c;
+    }
+
+    @keyframes scrollUp {
+      0% {
+        top: 70px;
+      }
+      100% {
+        top: -620px; /* Adjust this if you add/remove events */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="events-container">
+    <div class="events-header">📅 Upcoming Events</div>
+    <div class="events-list" id="eventsList">
+      <div class="event-card">
+        <div class="event-title">Mentorship Program Launch</div>
+        <div class="event-desc">Kickstart your journey with expert mentors.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Convocation Ceremony 2025</div>
+        <div class="event-desc">Celebrate success with your batchmates.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Alumni Networking Meet</div>
+        <div class="event-desc">Connect with fellow alumni and grow your network.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Career Guidance Webinar</div>
+        <div class="event-desc">Get advice from industry experts.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Startup Pitch Competition</div>
+        <div class="event-desc">Showcase your ideas and win funding.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Workshop: Advanced AI</div>
+        <div class="event-desc">Deep dive into AI technologies.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Cultural Fest 2025</div>
+        <div class="event-desc">Celebrate diversity with fun events.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Volunteer Drive</div>
+        <div class="event-desc">Give back to the community.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Tech Talk Series</div>
+        <div class="event-desc">Learn from tech leaders.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Annual Alumni Reunion</div>
+        <div class="event-desc">Relive memories and catch up.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Scholarship Applications Open</div>
+        <div class="event-desc">Apply for alumni scholarships.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Hackathon 2025</div>
+        <div class="event-desc">Collaborate and innovate under pressure.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Alumni Awards Night</div>
+        <div class="event-desc">Celebrate achievements and excellence.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Community Service Day</div>
+        <div class="event-desc">Make a difference in society.</div>
+        <button class="join-btn">Join</button>
+      </div>
+      <div class="event-card">
+        <div class="event-title">Guest Lecture: Industry Insights</div>
+        <div class="event-desc">Hear from top industry leaders.</div>
+        <button class="join-btn">Join</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.join-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        alert('Thanks for your interest! More details coming soon.');
+      });
+    });
+  </script>
+</body>
+</html>

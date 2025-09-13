@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Event Gallery</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f8ff;
+      color: #023e8a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .nav-bar {
+      background-color: #0077B6;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0096c7;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-bar a:hover {
+      background-color: #005f8c;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #0077B6;
+    }
+
+    .gallery-section {
+      margin-bottom: 40px;
+    }
+
+    .gallery-title {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .scroll-container {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      gap: 15px;
+      scroll-behavior: smooth;
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .scroll-container::-webkit-scrollbar-thumb {
+      background-color: #0077B6;
+      border-radius: 10px;
+    }
+
+    .image-box {
+      min-width: 220px;
+      height: 140px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .image-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .lightbox:target {
+      display: flex;
+    }
+
+    @media (max-width: 600px) {
+      .image-box {
+        min-width: 160px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="alumni.html">🏠 Alumni Home</a>
+    <a href="alumni-profile.html">👤 Profile</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </nav>
+
+  <h1>Event Gallery</h1>
+
+  <section class="gallery-section">
+    <div class="gallery-title">Annual Meetup 2025</div>
+    <div class="scroll-container">
+      <div class="image-box"><img src="./img1.png" alt="Annual Meetup 1" /></div>
+      <div class="image-box"><img src="./img2.png" alt="Annual Meetup 2" /></div>
+      <div class="image-box"><img src="./img3.png" alt="Annual Meetup 3" /></div>
+      <div class="image-box"><img src="./img4.png" alt="Annual Meetup 4" /></div>
+      <div class="image-box"><img src="./img5.png" alt="Annual Meetup 5" /></div>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="gallery-title">Workshop Highlights</div>
+    <div class="scroll-container">
+      <div class="image-box"><img src="./w1.png" alt="Workshop 1" /></div>
+      <div class="image-box"><img src="./w2.png" alt="Workshop 2" /></div>
+      <div class="image-box"><img src="./w3.png" alt="Workshop 3" /></div>
+      <div class="image-box"><img src="./w4.png" alt="Workshop 4" /></div>
+      <div class="image-box"><img src="./w5.png" alt="Workshop 5" /></div>
+    </div>
+  </section>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox">
+    <img id="lightbox-img" src="" alt="Preview" />
+  </div>
+
+  <script>
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'index.html';
+    });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    document.querySelectorAll('.image-box img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+      });
+    });
+
+    lightbox.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

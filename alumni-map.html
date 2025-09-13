@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Alumni World Map - Alumni Connect</title>
+
+  <!-- Google Fonts Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    /* Reset and base */
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      background: #f0f8ff;
+      color: #023e8a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    nav.nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0077B6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      color: white;
+    }
+
+    nav.nav .brand a {
+      color: white;
+      font-weight: 700;
+      font-size: 1.4rem;
+      text-decoration: none;
+    }
+
+    nav.nav .brand span {
+      color: #90e0ef;
+      font-weight: 800;
+    }
+
+    nav.nav .nav-actions a.btn {
+      background-color: #0096c7;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      margin-left: 12px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav.nav .nav-actions a.btn:hover {
+      background-color: #005f8c;
+    }
+
+    /* Main content */
+    main.main {
+      max-width: 1100px;
+      margin: 20px auto;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main.main h2 {
+      color: #0077B6;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    main.main p {
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    /* Map */
+    #map {
+      height: 600px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    /* Footer */
+    footer.site-footer {
+      max-width: 1100px;
+      margin: 0 auto 20px auto;
+      text-align: center;
+      color: #0077B6;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero small-hero">
+    <nav class="nav">
+      <div class="brand"><a href="index.html">Alumni <span>Connect</span></a></div>
+      <div class="nav-actions">
+        <a href="alumni-directory.html" class="btn">Directory</a>
+        <a href="alumni-profile.html" class="btn">Events</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main">
+    <h2>🌍 Alumni Across the World</h2>
+    <p>Explore where our alumni are making impact globally.</p>
+    <div id="map"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="yearFooter"></span> Alumni Connect</p>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    // Update footer year
+    document.getElementById('yearFooter').textContent = new Date().getFullYear();
+
+    // Initialize map after DOM content is loaded
+    document.addEventListener("DOMContentLoaded", function () {
+      const map = L.map('map').setView([20, 0], 2);
+
+      // OpenStreetMap Tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Alumni sample locations
+      const alumniLocations = [
+        { name: "John Doe", coords: [40.7128, -74.0060], city: "New York, USA" },
+        { name: "Priya Singh", coords: [28.6139, 77.2090], city: "Delhi, India" },
+        { name: "Michael Lee", coords: [37.7749, -122.4194], city: "San Francisco, USA" },
+        { name: "Sara Patel", coords: [51.5074, -0.1278], city: "London, UK" },
+        { name: "Carlos Ruiz", coords: [19.4326, -99.1332], city: "Mexico City, Mexico" },
+        { name: "Chen Wei", coords: [31.2304, 121.4737], city: "Shanghai, China" },
+        { name: "Fatima Zahra", coords: [33.5731, -7.5898], city: "Casablanca, Morocco" }
+      ];
+
+      // Add markers
+      alumniLocations.forEach(alumni => {
+        L.marker(alumni.coords)
+          .addTo(map)
+          .bindPopup(`<b>${alumni.name}</b><br>${alumni.city}`);
+      });
+    });
+  </script>
+
+</body>
+</html>

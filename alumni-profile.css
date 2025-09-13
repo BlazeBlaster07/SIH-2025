@@ -1,0 +1,197 @@
+/* Fonts & base */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #90E0EF 0%, #48CAE4 100%);
+  color: #03045E;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-bar {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  margin: 20px auto 0 auto;
+}
+
+.back-link,
+.logout-btn {
+  background-color: #0077B6;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.back-link:hover,
+.logout-btn:hover {
+  background-color: #005F8C;
+}
+
+.profile-container {
+  max-width: 900px;
+  width: 100%;
+  background: white;
+  margin: 30px auto 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px 50px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.profile-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+  border: 4px solid #00B4D8;
+}
+
+.profile-header h1 {
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.profile-role {
+  font-weight: 500;
+  color: #0077B6;
+  font-size: 1.1rem;
+}
+
+/* Profile sections */
+.profile-section {
+  margin-bottom: 40px;
+}
+
+.profile-section h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  border-bottom: 3px solid #00B4D8;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+/* Forms inside profile sections */
+form {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 15px 30px;
+  align-items: center;
+}
+
+label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #03045E;
+}
+
+input {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #90E0EF;
+  border-radius: 8px;
+  background-color: #f9faff;
+  color: #03045E;
+  cursor: not-allowed;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0077B6;
+  box-shadow: 0 0 5px rgba(0, 119, 182, 0.4);
+}
+
+/* Skills list */
+.skills-list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skills-list li {
+  background-color: #00B4D8;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Recommended friends bar */
+.friends-bar {
+  border-top: 2px solid #00B4D8;
+  padding-top: 30px;
+}
+
+.friends-bar h2 {
+  margin-bottom: 20px;
+}
+
+.friends-list {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.friend-card {
+  flex: 0 0 auto;
+  min-width: 130px;
+  background: #90E0EF;
+  border-radius: 12px;
+  padding: 20px 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  font-weight: 700;
+  color: #03045E;
+  text-align: center;
+  user-select: none;
+}
+
+/* Scrollbar styling for friends list */
+.friends-list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.friends-list::-webkit-scrollbar-thumb {
+  background: #00B4D8;
+  border-radius: 20px;
+}
+
+@media (max-width: 700px) {
+  .profile-container {
+    padding: 30px 20px;
+  }
+  form {
+    grid-template-columns: 1fr;
+  }
+  label {
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+  }
+  .skills-list {
+    justify-content: center;
+  }
+  .friends-list {
+    justify-content: flex-start;
+  }
+}

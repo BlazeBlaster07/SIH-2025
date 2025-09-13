@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alumni Contributions</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f0f8ff;
+      margin: 0;
+      padding: 40px 20px;
+      color: #023e8a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0077B6;
+      font-weight: 700;
+    }
+
+    .btn-container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    button, .back-btn {
+      background-color: #0077B6;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover, .back-btn:hover {
+      background-color: #005f8c;
+    }
+
+    table {
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: #0077B6;
+      color: white;
+      font-weight: 600;
+    }
+
+    th, td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:hover {
+      background-color: #caf0f8;
+      cursor: default;
+    }
+
+    .download-btn {
+      background-color: #0077B6;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #005f8c;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead tr {
+        display: none;
+      }
+
+      tbody tr {
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        padding: 14px;
+        background: white;
+      }
+
+      tbody td {
+        padding-left: 50%;
+        position: relative;
+      }
+
+      tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 20px;
+        font-weight: 700;
+        color: #0077B6;
+      }
+
+      .download-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contributions Made by Alumni</h1>
+
+  <div class="btn-container">
+    <button id="makeContributionBtn">+ Make Contribution</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Transaction Amount</th>
+        <th>Receipt</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="contributionsBody">
+      <!-- Rows added by JS -->
+    </tbody>
+  </table>
+
+  <a href="alumni.html" class="back-btn" style="margin-top: 30px;">← Back to Dashboard</a>
+
+  <script>
+    // Dummy contribution data
+    const contributions = [
+      { amount: 150, date: '2025-08-10' },
+      { amount: 200, date: '2025-07-22' },
+      { amount: 100, date: '2025-06-15' },
+      { amount: 250, date: '2025-05-30' }
+    ];
+
+    const user = JSON.parse(localStorage.getItem('loggedInUser')) || { username: 'You' };
+    const tbody = document.getElementById('contributionsBody');
+
+    contributions.forEach(contribution => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td data-label="Name">${user.username}</td>
+        <td data-label="Transaction Amount">$${contribution.amount}</td>
+        <td data-label="Receipt">
+          <button class="download-btn" onclick="downloadReceipt('${user.username}', '${contribution.amount}', '${contribution.date}')">Download</button>
+        </td>
+        <td data-label="Date">${contribution.date}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    function downloadReceipt(name, amount, date) {
+      alert(`Receipt for ${name}\nAmount: $${amount}\nDate: ${date}\n\n(Receipt download coming soon!)`);
+    }
+
+    document.getElementById('makeContributionBtn').addEventListener('click', () => {
+      alert('Redirecting to contribution form (Coming soon!)');
+      // You can redirect to a form page like:
+      // window.location.href = 'make-contribution.html';
+    });
+  </script>
+
+</body>
+</html>

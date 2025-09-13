@@ -1,0 +1,156 @@
+/* Base reset and font setup */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(to right, #0077B6, #00B4D8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+}
+
+/* Main container setup */
+.container {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Left panel styles (visual area) */
+.left-panel {
+  flex: 1;
+  background: #CAF0F8;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.left-panel h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #03045E;
+}
+
+.left-panel p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #03045E;
+}
+
+.left-panel lottie-player,
+.left-panel img {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Right panel styles (form area) */
+.right-panel {
+  flex: 1;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.login-form .logo {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #0077B6;
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #03045E;
+}
+
+/* Input styles */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #03045E;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #90E0EF;
+  transition: 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #0077B6;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 119, 182, 0.4);
+}
+
+/* Button styles */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #0077B6;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #005F8C;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+    margin: 30px 0;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .left-panel h1 {
+    font-size: 24px;
+  }
+
+  .left-panel lottie-player,
+  .left-panel img {
+    max-width: 250px;
+  }
+}

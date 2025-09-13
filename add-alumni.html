@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Alumni - Admin Panel</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background: #f0f8ff;
+      color: #023e8a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .nav-bar {
+      background-color: #023e8a;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .nav-left a, .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0077B6;
+      transition: background-color 0.3s ease;
+    }
+    .nav-left a:hover, .nav-right a:hover {
+      background-color: #005f8c;
+    }
+
+    /* Page header */
+    h1 {
+      text-align: center;
+      margin: 20px 0 10px;
+      font-weight: 700;
+      color: #0077B6;
+    }
+
+    /* Form container */
+    .form-container {
+      max-width: 500px;
+      background: white;
+      margin: 0 auto 40px;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #0077B6;
+    }
+
+    input, select {
+      padding: 10px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1.8px solid #0077B6;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #023e8a;
+    }
+
+    button {
+      background-color: #0077B6;
+      color: white;
+      font-weight: 700;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #005f8c;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .form-container {
+        margin: 20px 15px 40px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a href="admin.html">🏠 Admin Home</a>
+      <a href="manage-alumni.html">🔙 Manage Alumni</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </nav>
+
+  <h1>Add New Alumni / Send Invitation</h1>
+
+  <div class="form-container" role="main">
+    <form id="addAlumniForm" aria-label="Add Alumni Form">
+      <label for="studentName">Full Name <span aria-hidden="true">*</span></label>
+      <input type="text" id="studentName" name="studentName" placeholder="Enter full name" required autocomplete="off" />
+
+      <label for="studentEmail">Email Address <span aria-hidden="true">*</span></label>
+      <input type="email" id="studentEmail" name="studentEmail" placeholder="Enter email address" required autocomplete="off" />
+
+      <label for="studentGender">Gender <span aria-hidden="true">*</span></label>
+      <select id="studentGender" name="studentGender" required>
+        <option value="" disabled selected>Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="graduationYear">Graduation Year <span aria-hidden="true">*</span></label>
+      <input type="number" id="graduationYear" name="graduationYear" min="1900" max="2100" placeholder="e.g., 2023" required />
+
+      <label for="studentCity">City <span aria-hidden="true">*</span></label>
+      <input type="text" id="studentCity" name="studentCity" placeholder="Enter city" required autocomplete="off" />
+
+      <button type="submit" aria-label="Send Invitation">Send Invitation</button>
+    </form>
+  </div>
+
+<script>
+  const form = document.getElementById('addAlumniForm');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    // Collect form data
+    const name = form.studentName.value.trim();
+    const email = form.studentEmail.value.trim();
+    const gender = form.studentGender.value;
+    const graduationYear = form.graduationYear.value;
+    const city = form.studentCity.value.trim();
+
+    // Simple validation check
+    if (!name || !email || !gender || !graduationYear || !city) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+
+    // Simulate sending invitation email
+    alert(`Invitation sent to ${name} (${email}) successfully!`);
+
+    // Clear form for next entry
+    form.reset();
+    form.studentGender.selectedIndex = 0;
+  });
+
+  // Logout button handler
+  document.getElementById('logoutBtn').addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem("adminLoggedIn");
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>

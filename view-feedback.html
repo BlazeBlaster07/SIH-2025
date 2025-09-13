@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback & Admin Reports</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f0f8ff;
+      margin: 0; padding: 20px;
+      color: #023e8a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-bar {
+      background-color: #0077B6;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .nav-left a, .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #0096c7;
+      transition: background-color 0.3s ease;
+    }
+    .nav-left a:hover, .nav-right a:hover {
+      background-color: #005f8c;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0077B6;
+      font-weight: 700;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-grow: 1;
+    }
+    /* Feedback form */
+    form {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 480px;
+      flex: 1 1 480px;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #023e8a;
+    }
+    select, input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1.8px solid #0077B6;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Montserrat', sans-serif;
+      color: #023e8a;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 100px;
+      max-height: 200px;
+    }
+    button {
+      margin-top: 25px;
+      background-color: #0077B6;
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #005f8c;
+    }
+    .thank-you {
+      margin-top: 20px;
+      text-align: center;
+      color: green;
+      font-weight: 600;
+    }
+
+    /* Admin reports */
+    .reports {
+      flex: 1 1 600px;
+      background: white;
+      border-radius: 12px;
+      padding: 25px 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .summary-cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #caf0f8;
+      padding: 20px 25px;
+      border-radius: 12px;
+      min-width: 140px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 20px;
+      color: #0077B6;
+      flex: 1 1 140px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .chart-container {
+      max-width: 100%;
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px 18px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #0077B6;
+      color: white;
+      font-weight: 600;
+    }
+    tbody tr:hover {
+      background-color: #caf0f8;
+    }
+    #searchInput {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      border: 1.8px solid #0077B6;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .reports, form {
+        max-width: 100%;
+        flex: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a href="alumni.html">🏠 Alumni Home</a>
+      <a href="alumni-profile.html">👤 Profile</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </nav>
+
+  <h1>Alumni Feedback & Admin Reports</h1>
+
+  <div class="container">
+
+    <!-- Feedback Form -->
+    <form id="feedbackForm" aria-label="Alumni feedback form">
+      <h2>Submit Feedback</h2>
+      <label for="category">Feedback Type</label>
+      <select id="category" required>
+        <option value="" disabled selected>Select type</option>
+        <option value="Suggestion">Suggestion</option>
+        <option value="Complaint">Complaint</option>
+        <option value="Praise">Praise</option>
+        <option value="Question">Question</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="feedbackText">Your Feedback</label>
+      <textarea id="feedbackText" maxlength="500" placeholder="Write your feedback here..." required></textarea>
+
+      <label for="email">Email (optional, for follow-up)</label>
+      <input type="email" id="email" placeholder="your.email@example.com" />
+
+      <label for="rating">Rate your experience</label>
+      <select id="rating">
+        <option value="" disabled selected>Choose a rating</option>
+        <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+        <option value="4">⭐⭐⭐⭐ (Good)</option>
+        <option value="3">⭐⭐⭐ (Average)</option>
+        <option value="2">⭐⭐ (Poor)</option>
+        <option value="1">⭐ (Very Poor)</option>
+      </select>
+
+      <button type="submit">Submit Feedback</button>
+
+      <div class="thank-you" id="thankYouMessage" style="display:none;">
+        Thank you for your feedback! We appreciate your time.
+      </div>
+    </form>
+
+    <!-- Admin Reports -->
+    <section class="reports" aria-label="Admin reports dashboard">
+      <h2>Admin Reports Dashboard</h2>
+
+      <div class="summary-cards" aria-live="polite">
+        <div class="card" id="totalAlumni">Total Alumni: 0</div>
+        <div class="card" id="totalFeedbacks">Feedbacks Received: 0</div>
+        <div class="card" id="avgRating">Average Rating: N/A</div>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="feedbackChart" aria-label="Feedback type distribution chart" role="img"></canvas>
+      </div>
+
+      <input type="text" id="searchInput" placeholder="Search feedback by email or text..." aria-label="Search feedback" />
+
+      <table aria-label="Feedback details table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Feedback</th>
+            <th>Email</th>
+            <th>Rating</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody id="feedbackTableBody">
+          <!-- Rows added dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <script>
+    // Navigation Logout
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html";
+    });
+
+    // Data store for feedbacks (mock database)
+    let feedbacks = [];
+
+    // Submit feedback form
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const category = document.getElementById('category').value;
+      const feedbackText = document.getElementById('feedbackText').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const rating = document.getElementById('rating').value;
+      const timestamp = new Date();
+
+      if (!category || !feedbackText) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Add feedback to the store
+      feedbacks.push({
+        category,
+        feedbackText,
+        email: email || 'N/A',
+        rating: rating || 'N/A',
+        timestamp: timestamp.toLocaleString()
+      });
+
+      this.reset();
+      document.getElementById('thankYouMessage').style.display = 'block';
+
+      // Refresh reports data
+      updateReports();
+    });
+
+    // Update reports section
+    function updateReports() {
+      const totalAlumni = 500; // Example static data, ideally from DB
+      document.getElementById('totalAlumni').textContent = `Total Alumni: ${totalAlumni}`;
+      document.getElementById('totalFeedbacks').textContent = `Feedbacks Received: ${feedbacks.length}`;
+
+      // Average rating calculation
+      const ratings = feedbacks
+        .map(f => Number(f.rating))
+        .filter(r => !isNaN(r));
+      let avgRating = ratings.length > 0 ? (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(2) : 'N/A';
+      document.getElementById('avgRating').textContent = `Average Rating: ${avgRating}`;
+
+      // Prepare data for chart
+      const categories = ['Suggestion', 'Complaint', 'Praise', 'Question', 'Other'];
+      const counts = categories.map(cat => feedbacks.filter(f => f.category === cat).length);
+
+      // Update chart
+      if (window.feedbackChartInstance) {
+        window.feedbackChartInstance.data.datasets[0].data = counts;
+        window.feedbackChartInstance.update();
+      }
+
+      // Update feedback table
+      renderTable(feedbacks);
+    }
+
+    // Render feedback table rows
+    function renderTable(data) {
+      const tbody = document.getElementById('feedbackTableBody');
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#555;">No feedback yet.</td></tr>`;
+        return;
+      }
+
+      data.forEach(fb => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${fb.category}</td>
+          <td>${escapeHTML(fb.feedbackText)}</td>
+          <td>${escapeHTML(fb.email)}</td>
+          <td>${fb.rating}</td>
+          <td>${fb.timestamp}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Escape HTML to avoid injection in table
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[m];
+      });
+    }
+
+    // Initialize chart
+    const ctx = document.getElementById('feedbackChart').getContext('2d');
+    window.feedbackChartInstance = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Suggestion', 'Complaint', 'Praise', 'Question', 'Other'],
+        datasets: [{
+          label: 'Feedback Type Count',
+          data: [0, 0, 0, 0, 0],
+          backgroundColor: [
+            '#00b4d8',
+            '#ff595e',
+            '#8ac926',
+            '#ffca3a',
+            '#1982c4'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            enabled: true
+          }
+        }
+      }
+    });
+
+    // Search filter on feedback table
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function() {
+      const val = this.value.toLowerCase();
+      const filtered = feedbacks.filter(fb => {
+        return fb.email.toLowerCase().includes(val) || fb.feedbackText.toLowerCase().includes(val);
+      });
+      renderTable(filtered);
+    });
+
+    // Initial load
+    updateReports();
+
+  </script>
+
+</body>
+</html>
